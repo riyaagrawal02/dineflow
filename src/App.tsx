@@ -15,6 +15,7 @@ import TrackOrder from "./pages/TrackOrder";
 import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import VerifyEmail from "./pages/VerifyEmail";
 import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

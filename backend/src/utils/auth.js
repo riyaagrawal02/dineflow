@@ -9,5 +9,6 @@ export const serializeUser = (user) => ({
     id: user._id.toString(),
     email: user.email,
     displayName: user.displayName || "",
+    emailVerified: Boolean(user.emailVerified),
     createdAt: user.createdAt,
 });

@@ -6,6 +6,7 @@ interface AuthUser {
   email: string;
   displayName?: string;
   createdAt?: string;
+  emailVerified?: boolean;
 }
 
 interface AuthContextType {
@@ -56,15 +57,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, displayName: string) => {
-    const { token, user: newUser } = await apiPost<{ token: string; user: AuthUser }>("/auth/signup", {
+    await apiPost<{ ok: boolean }>("/auth/signup", {
       email,
       password,
       displayName,
     });
-    setAuthToken(token);
-    setAuthUser(newUser);
-    setUser(newUser);
-    checkAdmin(newUser.email);
   };
 
   const signIn = async (email: string, password: string) => {
