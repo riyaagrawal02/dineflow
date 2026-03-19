@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import User from "../models/User.js";
 import { createToken, serializeUser } from "../utils/auth.js";
-import { requireAuth } from "../middleware/auth.js";
+import { optionalAuth } from "../middleware/auth.js";
 import { sendEmail } from "../utils/email.js";
 
 const router = express.Router();
@@ -119,7 +119,8 @@ router.post("/resend-verification", async (req, res, next) => {
     }
 });
 
-router.get("/me", requireAuth, (req, res) => {
+router.get("/me", optionalAuth, (req, res) => {
+    if (!req.user) return res.json({ user: null });
     return res.json({ user: serializeUser(req.user) });
 });
 
