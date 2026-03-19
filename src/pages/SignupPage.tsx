@@ -29,8 +29,18 @@ const SignupPage = () => {
     }
     setLoading(true);
     try {
-      await signUp(email, password, name);
-      toast.success("Account created! Check your email to confirm.");
+      const { status } = await signUp(email, password, name);
+      if (status === "created") {
+        toast.success("Account created! Check your email to confirm.");
+        navigate("/login");
+        return;
+      }
+      if (status === "resent") {
+        toast.success("Verification email sent. Check your inbox.");
+        navigate("/login");
+        return;
+      }
+      toast.info("Account already exists. Please sign in.");
       navigate("/login");
     } catch (err: any) {
       toast.error(err.message || "Signup failed");

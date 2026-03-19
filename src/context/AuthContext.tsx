@@ -13,7 +13,7 @@ interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   isAdmin: boolean;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName: string) => Promise<{ status: "created" | "resent" | "existing" }>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -57,11 +57,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, displayName: string) => {
-    await apiPost<{ ok: boolean }>("/auth/signup", {
+    const response = await apiPost<{ ok: boolean; status: "created" | "resent" | "existing" }>("/auth/signup", {
       email,
       password,
       displayName,
     });
+    return { status: response.status };
   };
 
   const signIn = async (email: string, password: string) => {

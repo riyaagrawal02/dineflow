@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { apiPost } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,8 +15,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showResend, setShowResend] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,28 +30,8 @@ const LoginPage = () => {
     } catch (err: any) {
       const message = err.message || "Login failed";
       toast.error(message);
-      if (message === "Email not verified") {
-        setShowResend(true);
-      }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleResend = async () => {
-    if (!email.trim()) {
-      toast.error("Enter your email to resend verification");
-      return;
-    }
-    setResendLoading(true);
-    try {
-      await apiPost<{ ok: boolean }>("/auth/resend-verification", { email });
-      toast.success("Verification email sent");
-      setShowResend(false);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to resend verification");
-    } finally {
-      setResendLoading(false);
     }
   };
 
@@ -86,17 +63,6 @@ const LoginPage = () => {
           <Button type="submit" disabled={loading} className="w-full rounded-full shadow-glow" size="lg">
             {loading ? "Signing in..." : "Sign In"}
           </Button>
-          {showResend && (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={resendLoading}
-              onClick={handleResend}
-              className="w-full rounded-full"
-            >
-              {resendLoading ? "Sending..." : "Resend verification email"}
-            </Button>
-          )}
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <Link to="/signup" className="font-semibold text-primary hover:underline">Sign Up</Link>
